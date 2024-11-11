@@ -25,11 +25,11 @@ def get_uid(token):
     uid = result.get('data', {}).get('uid')
     return uid
 
-async def connect_to_http(uid, token, delays):
+async def connect_to_http(uid, token, delays, browserid):
     user_agent = UserAgent(os=['windows', 'macos', 'linux'], browsers='chrome')
     random_user_agent = user_agent.random
     rdm = str(uuid.uuid4())[8:]
-    device_id = f"17c9bbe4{rdm}"
+    device_id = f"{browserid}{rdm}"
     logger.info(f"Device ID: {device_id}")
     
     async with aiohttp.ClientSession(
@@ -71,7 +71,8 @@ async def connect_to_http(uid, token, delays):
 async def main():
     delays = int(input('Input Delay Second Per Looping : '))
     tokenid = input('Input Token AIGAEA : ')
-    await connect_to_http(get_uid(tokenid), tokenid, delays)
+    browserid = str(input('Input First 8 Character BrowserId : '))
+    await connect_to_http(get_uid(tokenid), tokenid, delays, browserid)
 
 # Run the main function
 if __name__ == "__main__":
