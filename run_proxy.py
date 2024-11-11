@@ -69,7 +69,8 @@ async def connect_to_http(uid, token, proxy, device_id):
 # Function to run all proxies concurrently
 async def run_all_proxies(uid, token, proxies):
     tasks = []
-    device_id = str(uuid.uuid4())
+    rdm = str(uuid.uuid4())[8:]
+    device_id = f"17c9bbe4{rdm}"
     
     # Create a task for each proxy
     for proxy in proxies:
