@@ -28,7 +28,8 @@ def get_uid(token):
 async def connect_to_http(uid, token, delays):
     user_agent = UserAgent(os=['windows', 'macos', 'linux'], browsers='chrome')
     random_user_agent = user_agent.random
-    device_id = str(uuid.uuid4())
+    rdm = str(uuid.uuid4())[8:]
+    device_id = f"17c9bbe4{rdm}"
     logger.info(f"Device ID: {device_id}")
     
     async with aiohttp.ClientSession(
