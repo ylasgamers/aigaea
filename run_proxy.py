@@ -67,10 +67,10 @@ async def connect_to_http(uid, token, proxy, device_id):
             logger.error(f"Error using proxy {proxy}: {str(e)}")
 
 # Function to run all proxies concurrently
-async def run_all_proxies(uid, token, proxies):
+async def run_all_proxies(uid, token, proxies, browserid):
     tasks = []
     rdm = str(uuid.uuid4())[8:]
-    device_id = f"17c9bbe4{rdm}"
+    device_id = f"{browserid}{rdm}"
     
     # Create a task for each proxy
     for proxy in proxies:
@@ -81,11 +81,11 @@ async def run_all_proxies(uid, token, proxies):
     await asyncio.gather(*tasks)
 
 # Function to loop through proxies continuously
-async def loop_proxies(uid, token, proxies, delays, loop_count=None):
+async def loop_proxies(uid, token, proxies, delays, browserid, loop_count=None):
     count = 0
     while True:
         logger.info(f"Starting loop {count + 1}...")
-        await run_all_proxies(uid, token, proxies)
+        await run_all_proxies(uid, token, proxies, browserid)
         
         # Optional: add a delay between each cycle
         print(f"Cycle {count + 1} completed. Waiting before next cycle in {delays} seconds...")
@@ -101,9 +101,10 @@ async def loop_proxies(uid, token, proxies, delays, loop_count=None):
 async def main():
     delays = int(input('Input Delay Second Per Looping : '))
     tokenid = input('Input Token AIGAEA : ')
+    browserid = str(input('Input First 8 Character BrowserId : '))
     proxies = load_proxies()  # Load proxies from the local file
     loop_count = None  # Set a specific number of loops, or None for infinite looping
-    await loop_proxies(get_uid(tokenid), tokenid, proxies, delays, loop_count)
+    await loop_proxies(get_uid(tokenid), tokenid, proxies, delays, browserid, loop_count)
 
 # Run the main function
 if __name__ == "__main__":
